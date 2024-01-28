@@ -11,6 +11,7 @@ interface IFromProps {
   placeholder?: string;
   label: string;
   required: boolean;
+  min?: number;
 }
 
 const FormFieldUtils: FC<IFromProps> = ({
@@ -21,6 +22,7 @@ const FormFieldUtils: FC<IFromProps> = ({
   placeholder,
   label,
   required = false,
+  ...rest
 }) => {
   return (
     <div>
@@ -31,6 +33,7 @@ const FormFieldUtils: FC<IFromProps> = ({
         placeholder={placeholder}
         type={type}
         className="mt-2"
+        {...rest}
       />
     </div>
   );
