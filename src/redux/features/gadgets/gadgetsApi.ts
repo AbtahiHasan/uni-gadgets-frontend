@@ -9,7 +9,13 @@ const gadgetsApi = baseApi.injectEndpoints({
         body: gadgetInfo,
       }),
     }),
+    getGadgets: builder.query({
+      query: () => ({
+        url: "/products/get-products",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useAddGadgetMutation } = gadgetsApi;
+export const { useAddGadgetMutation, useGetGadgetsQuery } = gadgetsApi;

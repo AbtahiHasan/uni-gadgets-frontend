@@ -5,7 +5,7 @@ import { FormSuccess } from "@/components/shared/form-success";
 import Heading from "@/components/shared/heading";
 import { Button } from "@/components/ui/button";
 
-import { useAddGadgetMutation } from "@/redux/features/gadgets/gedgetsApi";
+import { useAddGadgetMutation } from "@/redux/features/gadgets/gadgetsApi";
 
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
