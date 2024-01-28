@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import * as z from "zod";
@@ -20,11 +21,19 @@ import { Button } from "@/components/ui/button";
 import { CardWrapper } from "./shared/card-wrapper";
 import { FormError } from "./shared/form-error";
 import { FormSuccess } from "./shared/form-success";
+import { useRegisterMutation } from "@/redux/features/auth/authApi";
+import { jwtDecode } from "jwt-decode";
+import { setUser } from "@/redux/features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "@/redux/hooks";
 
 export const RegistrationFrom = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const [register] = useRegisterMutation();
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
@@ -40,10 +49,22 @@ export const RegistrationFrom = () => {
     setSuccess("");
     console.log(values);
     startTransition(() => {
-      //   register(values).then((data) => {
-      //     setError(data.error);
-      //     setSuccess(data.success);
-      //   });
+      register(values).then((data: any) => {
+        console.log({ data: data?.data });
+        if (data?.data?.success) {
+          form.reset();
+
+          const user = jwtDecode(data?.data?.data?.accessToken);
+          dispatch(
+            setUser({ user: user, token: data?.data?.data?.accessToken })
+          );
+          setSuccess(data?.data?.message);
+          navigate("/dashboard");
+        }
+        if (data?.error?.data?.message) {
+          setError(data?.error?.data?.message);
+        }
+      });
     });
   };
 
