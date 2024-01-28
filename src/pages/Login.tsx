@@ -1,9 +1,9 @@
-import { Button } from "@/components/ui/button";
+import { LoginFrom } from "@/components/LoginFrom";
 
 const Login = () => {
   return (
-    <main>
-      <Button>Login</Button>
+    <main className="flex justify-center items-center h-screen">
+      <LoginFrom />
     </main>
   );
 };
