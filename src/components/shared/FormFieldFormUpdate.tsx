@@ -4,7 +4,6 @@ import { FC } from "react";
 import { Input } from "../ui/input";
 
 interface IFromProps {
-  register?: any;
   name: string;
   isPending: boolean;
   type: string;
@@ -16,8 +15,7 @@ interface IFromProps {
   defaultValue?: any;
 }
 
-const FormFieldUtils: FC<IFromProps> = ({
-  register,
+const FormFieldFormUpdate: FC<IFromProps> = ({
   name,
   isPending,
   type,
@@ -30,15 +28,16 @@ const FormFieldUtils: FC<IFromProps> = ({
     <div>
       <span className="font-bold ">{label}</span>
       <Input
-        {...register(name, { required })}
+        name={name}
         disabled={isPending}
         placeholder={placeholder}
         type={type}
         className="mt-2"
+        required={required}
         {...rest}
       />
     </div>
   );
 };
 
-export default FormFieldUtils;
+export default FormFieldFormUpdate;

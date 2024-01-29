@@ -14,16 +14,35 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import FormFieldUtils from "@/components/shared/FormFieldUtils";
 import { useForm } from "react-hook-form";
+import { useAddSaleMutation } from "@/redux/features/sales/SalesApi";
+import toast from "react-hot-toast";
+import { Input } from "@/components/ui/input";
+import { GoSearch } from "react-icons/go";
 
 const SalesManagement = () => {
-  const { data } = useGetGadgetsQuery(null);
+  const { data } = useGetGadgetsQuery(undefined);
   const [open, setOpen] = useState(false);
   const { register, handleSubmit, reset } = useForm();
   const [gadgetId, setGadgetId] = useState("");
+  const [limit, setLimit] = useState(0);
+  const [addSale] = useAddSaleMutation();
   console.log({ data });
 
   const sellGadget = (data: any) => {
     console.log({ data, gadgetId });
+
+    addSale({
+      productId: gadgetId,
+      quantity: parseInt(data.quantity),
+      buyerName: data.buyerName,
+      buyDate: data.buyDate,
+    }).then((res: any) => {
+      if (res.data.success) {
+        reset();
+        toast.success("Sell successfully");
+        setOpen(false);
+      }
+    });
   };
   return (
     <main
@@ -40,7 +59,10 @@ const SalesManagement = () => {
         } p-5 rounded  z-50  border bg-white fixed md:w-[50%] w-[90%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}
       >
         <IoMdCloseCircleOutline
-          onClick={() => setOpen(false)}
+          onClick={() => {
+            setOpen(false);
+            reset();
+          }}
           className="text-red-500 text-3xl cursor-pointer ml-auto"
         />
         <form onSubmit={handleSubmit(sellGadget)}>
@@ -52,7 +74,8 @@ const SalesManagement = () => {
             required={true}
             type="number"
             min={0}
-            placeholder="quantity"
+            max={limit}
+            placeholder={`available quantity ${limit}`}
           />
           <FormFieldUtils
             register={register}
@@ -65,8 +88,8 @@ const SalesManagement = () => {
           />
           <FormFieldUtils
             register={register}
-            label="Quantity"
-            name="quantity"
+            label="Buy Date"
+            name="buyDate"
             isPending={false}
             required={true}
             type="date"
@@ -76,6 +99,15 @@ const SalesManagement = () => {
           </Button>
         </form>
       </div>
+      <section>
+        <form className="relative w-[80%] h-[40px] mx-auto rounded-s-full mt-6">
+          <Input
+            className="w-full rounded-full pl-10 h-full"
+            placeholder="search here"
+          />
+          <GoSearch className="absolute top-1/2 -translate-y-1/2 left-4" />
+        </form>
+      </section>
       <section className="md:grid grid-cols-3 gap-5 mt-10">
         {Array.isArray(data?.data) &&
           data?.data?.map((gadget: any) => {
@@ -87,6 +119,7 @@ const SalesManagement = () => {
               brand,
               modelNumber,
               category,
+              quantity,
             } = gadget;
             return (
               <Card key={_id}>
@@ -97,6 +130,10 @@ const SalesManagement = () => {
                   <p className="flex gap-2 mt-2">
                     <span className="font-bold">Price:</span>
                     {price}
+                  </p>
+                  <p className="flex gap-2 mt-2">
+                    <span className="font-bold">Quantity:</span>
+                    {quantity}
                   </p>
                   <p className="flex gap-2">
                     <span className="font-bold">Release Date:</span>
@@ -121,6 +158,7 @@ const SalesManagement = () => {
                     onClick={() => {
                       setOpen(true);
                       setGadgetId(_id);
+                      setLimit(quantity);
                     }}
                     className="w-full"
                   >

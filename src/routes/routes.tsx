@@ -8,6 +8,7 @@ import AddGadgets from "@/pages/AddGadgets";
 import Gadgets from "@/pages/Gadgets";
 import SalesManagement from "@/pages/SalesManagement";
 import SalesHistory from "@/pages/SalesHistory";
+import UpdateGadgets from "@/pages/UpdateGadgets";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: "gadgets",
         element: <Gadgets />,
+      },
+      {
+        path: "gadgets/:id",
+        element: <UpdateGadgets />,
       },
       {
         path: "sales-management",

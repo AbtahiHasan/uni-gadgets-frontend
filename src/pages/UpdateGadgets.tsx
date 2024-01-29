@@ -1,54 +1,73 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import FormFieldUtils from "@/components/shared/FormFieldUtils";
+import DuplicateModal from "@/components/DuplicateModal";
+import FormFieldFormUpdate from "@/components/shared/FormFieldFormUpdate";
+
 import { FormError } from "@/components/shared/form-error";
 import { FormSuccess } from "@/components/shared/form-success";
 import Heading from "@/components/shared/heading";
 import { Button } from "@/components/ui/button";
-
-import { useAddGadgetMutation } from "@/redux/features/gadgets/gadgetsApi";
-
+import {
+  useGetSingleGadgetQuery,
+  useUpdateGadgetMutation,
+} from "@/redux/features/gadgets/gadgetsApi";
 import { useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
 
-const AddGadgets = () => {
+import { useParams } from "react-router-dom";
+
+const UpdateGadgets = () => {
   const [error, setError] = useState<string | undefined>("");
-  const [addGadget] = useAddGadgetMutation();
+
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
+  const [open, setOpen] = useState(false);
+  const [updateGadget] = useUpdateGadgetMutation();
+  const { id } = useParams();
+  const { data } = useGetSingleGadgetQuery(id);
+  const {
+    name,
+    price,
+    quantity,
+    releaseDate,
+    brand,
+    modelNumber,
+    category,
+    operatingSystem,
+    connectivity,
+    powerSource,
+    features,
+  } = data?.data || {};
 
-  const { handleSubmit, register, reset } = useForm();
+  const { cameraResolution, storageCapacity } = features || {};
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (e: any) => {
     setError("");
     setSuccess("");
-    console.log(data);
+    const form = e.target;
     const gadget = {
-      name: data.name,
-      price: parseFloat(data.price),
-      quantity: parseInt(data.quantity),
-      releaseDate: data.releaseDate,
-      brand: data.brand,
-      modelNumber: data.modelNumber,
-      category: data.category,
-      operatingSystem: data.operatingSystem,
-      connectivity: data.connectivity,
-      powerSource: data.powerSource,
+      name: form.name.value,
+      price: parseFloat(form.price.value),
+      quantity: parseInt(form.quantity.value),
+      releaseDate: form.releaseDate.value,
+      brand: form.brand.value,
+      modelNumber: form.modelNumber.value,
+      category: form.category.value,
+      operatingSystem: form.operatingSystem.value,
+      connectivity: form.connectivity.value,
+      powerSource: form.powerSource.value,
       features: {
-        cameraResolution: parseFloat(data.cameraResolution),
-        storageCapacity: parseFloat(data.storageCapacity),
+        cameraResolution: parseFloat(form.cameraResolution.value),
+        storageCapacity: parseFloat(form.storageCapacity.value),
       },
     };
 
     startTransition(() => {
-      addGadget(gadget)
+      updateGadget({ id, payload: gadget })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .then((data: any) => {
-          console.log("gadgets", data?.data?.data);
           if (data?.data.error) {
-            reset();
             setError(data.error);
           }
           if (data?.data?.success) {
-            reset();
             setSuccess(data?.data?.message);
           }
         })
@@ -58,119 +77,115 @@ const AddGadgets = () => {
         });
     });
   };
-
   return (
     <main>
-      <Heading title="Add Gadgets" />
+      <Heading title="Manage Gadgets" />
+      <DuplicateModal open={open} setOpen={setOpen} data={data?.data || {}} />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={onSubmit} className="space-y-6">
         <div className="md:grid md:grid-cols-3 md:gap-5">
-          <FormFieldUtils
-            register={register}
+          <FormFieldFormUpdate
             type="text"
             name="name"
             label="Name"
             isPending={isPending}
-            required={true}
+            defaultValue={name}
           />
-          <FormFieldUtils
-            register={register}
+          <FormFieldFormUpdate
             type="number"
             name="price"
             label="Price"
             isPending={isPending}
-            required={true}
+            defaultValue={price}
           />
-          <FormFieldUtils
-            register={register}
+          <FormFieldFormUpdate
             type="number"
             name="quantity"
             label="Quantity"
             isPending={isPending}
-            required={true}
+            defaultValue={quantity}
           />
-          <FormFieldUtils
-            register={register}
+          <FormFieldFormUpdate
             type="date"
             name="releaseDate"
             label="Release Date"
             isPending={isPending}
-            required={true}
+            defaultValue={releaseDate}
           />
 
-          <FormFieldUtils
-            register={register}
+          <FormFieldFormUpdate
             type="text"
             name="brand"
             label="Brand"
             isPending={isPending}
-            required={true}
+            defaultValue={brand}
           />
-          <FormFieldUtils
-            register={register}
+          <FormFieldFormUpdate
             type="text"
             name="modelNumber"
             label="Model Number"
             isPending={isPending}
-            required={true}
+            defaultValue={modelNumber}
           />
-          <FormFieldUtils
-            register={register}
+          <FormFieldFormUpdate
             type="text"
             name="category"
             label="Category"
             isPending={isPending}
-            required={true}
+            defaultValue={category}
           />
-          <FormFieldUtils
-            register={register}
+          <FormFieldFormUpdate
             type="text"
             name="operatingSystem"
             label="Operating System"
             isPending={isPending}
             required={false}
+            defaultValue={operatingSystem}
           />
-          <FormFieldUtils
-            register={register}
+          <FormFieldFormUpdate
             type="text"
             name="connectivity"
             label="Connectivity"
             isPending={isPending}
             required={false}
+            defaultValue={connectivity}
           />
-          <FormFieldUtils
-            register={register}
+          <FormFieldFormUpdate
             type="text"
             name="powerSource"
             label="Power Source"
             isPending={isPending}
             required={false}
+            defaultValue={powerSource}
           />
-          <FormFieldUtils
-            register={register}
+          <FormFieldFormUpdate
             type="number"
             name="cameraResolution"
             label="Camera Resolution"
             isPending={isPending}
             required={false}
+            defaultValue={cameraResolution}
           />
-          <FormFieldUtils
-            register={register}
+          <FormFieldFormUpdate
             type="number"
             name="storageCapacity"
             label="Storage Capacity"
             isPending={isPending}
             required={false}
+            defaultValue={storageCapacity}
           />
         </div>
         <FormError message={error} />
         <FormSuccess message={success} />
         <Button disabled={isPending} type="submit" className="w-full">
-          Add Product
+          Update Gadget
+        </Button>
+        <Button onClick={() => setOpen(true)} type="button">
+          Duplicate
         </Button>
       </form>
     </main>
   );
 };
 
-export default AddGadgets;
+export default UpdateGadgets;
