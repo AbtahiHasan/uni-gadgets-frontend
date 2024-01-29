@@ -50,6 +50,21 @@ const gadgetsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["gadgets"],
     }),
+    deleteMultiple: builder.mutation({
+      query: (ids: string[]) => ({
+        url: `/products/delete-multiple-products`,
+        method: "DELETE",
+        body: { ids },
+      }),
+      invalidatesTags: ["gadgets"],
+    }),
+    deleteGadget: builder.mutation({
+      query: (id: string) => ({
+        url: `/products/delete-product/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["gadgets"],
+    }),
   }),
 });
 
@@ -58,4 +73,6 @@ export const {
   useGetGadgetsQuery,
   useGetSingleGadgetQuery,
   useUpdateGadgetMutation,
+  useDeleteMultipleMutation,
+  useDeleteGadgetMutation,
 } = gadgetsApi;
