@@ -14,7 +14,7 @@ const gadgetsApi = baseApi.injectEndpoints({
     getGadgets: builder.query({
       query: (data?: any) => {
         let searchParams = {};
-        if (Object.keys(data as object)) {
+        if (Object.keys(data as object)?.length) {
           searchParams = new URLSearchParams({
             ...(data?.minPrice && { minPrice: data.minPrice }),
             ...(data?.maxPrice && { maxPrice: data.maxPrice }),
@@ -41,6 +41,12 @@ const gadgetsApi = baseApi.injectEndpoints({
       providesTags: ["gadgets"],
     }),
 
+    getAllGadgets: builder.query({
+      query: (searchText) => ({
+        url: `/products/get-products?searchTerms=${searchText}`,
+        method: "GET",
+      }),
+    }),
     getSingleGadget: builder.query({
       query: (id) => ({
         url: `/products/get-product/${id}`,
@@ -77,6 +83,7 @@ export const {
   useAddGadgetMutation,
   useGetGadgetsQuery,
   useGetSingleGadgetQuery,
+  useGetAllGadgetsQuery,
   useUpdateGadgetMutation,
   useDeleteMultipleMutation,
   useDeleteGadgetMutation,

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import Heading from "@/components/shared/heading";
-import { useGetGadgetsQuery } from "@/redux/features/gadgets/gadgetsApi";
+import { useGetAllGadgetsQuery } from "@/redux/features/gadgets/gadgetsApi";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import {
   Card,
@@ -20,7 +20,8 @@ import { Input } from "@/components/ui/input";
 import { GoSearch } from "react-icons/go";
 
 const SalesManagement = () => {
-  const { data } = useGetGadgetsQuery(undefined);
+  const [searchText, setSearchText] = useState("");
+  const { data, refetch } = useGetAllGadgetsQuery(searchText);
   const [open, setOpen] = useState(false);
   const { register, handleSubmit, reset } = useForm();
   const [gadgetId, setGadgetId] = useState("");
@@ -29,8 +30,6 @@ const SalesManagement = () => {
   console.log({ data });
 
   const sellGadget = (data: any) => {
-    console.log({ data, gadgetId });
-
     addSale({
       productId: gadgetId,
       quantity: parseInt(data.quantity),
@@ -39,6 +38,7 @@ const SalesManagement = () => {
     }).then((res: any) => {
       if (res.data.success) {
         reset();
+        refetch();
         setOpen(false);
 
         toast.success("Sell successfully", { position: "top-right" });
@@ -103,6 +103,9 @@ const SalesManagement = () => {
       <section>
         <form className="relative w-[80%] h-[40px] mx-auto rounded-s-full mt-6">
           <Input
+            onChange={(e: any) => {
+              setSearchText(e.target.value);
+            }}
             className="w-full rounded-full pl-10 h-full"
             placeholder="search here"
           />

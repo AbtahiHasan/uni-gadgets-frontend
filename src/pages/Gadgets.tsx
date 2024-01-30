@@ -54,6 +54,9 @@ const Gadgets = () => {
               </tr>
             </thead>
             <tbody>
+              {Array.isArray(data?.data) && data?.data?.length === 0 && (
+                <p className="text-center my-2 ">No Gadgets found</p>
+              )}
               {Array.isArray(data?.data) &&
                 data?.data?.map((gadget: any, i: number) => {
                   const {
