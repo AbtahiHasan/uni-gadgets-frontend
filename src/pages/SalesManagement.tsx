@@ -39,8 +39,9 @@ const SalesManagement = () => {
     }).then((res: any) => {
       if (res.data.success) {
         reset();
-        toast.success("Sell successfully");
         setOpen(false);
+
+        toast.success("Sell successfully", { position: "top-right" });
       }
     });
   };

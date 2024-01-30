@@ -8,8 +8,15 @@ const salesApi = baseApi.injectEndpoints({
         method: "POST",
         body: saleInfo,
       }),
+      invalidatesTags: ["gadgets"],
+    }),
+    getSaleHistory: builder.query({
+      query: (value: string) => ({
+        url: `/sales/get-sales-history?filter=${value}`,
+        method: "GET",
+      }),
     }),
   }),
 });
 
-export const { useAddSaleMutation } = salesApi;
+export const { useAddSaleMutation, useGetSaleHistoryQuery } = salesApi;

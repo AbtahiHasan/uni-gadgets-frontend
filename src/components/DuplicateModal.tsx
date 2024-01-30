@@ -95,6 +95,7 @@ const DuplicateModal = ({ open, data, setOpen }: any) => {
             label="Name"
             isPending={isPending}
             defaultValue={name}
+            required={true}
           />
           <FormFieldFormUpdate
             type="number"
@@ -102,6 +103,7 @@ const DuplicateModal = ({ open, data, setOpen }: any) => {
             label="Price"
             isPending={isPending}
             defaultValue={price}
+            required={true}
           />
           <FormFieldFormUpdate
             type="number"
@@ -109,6 +111,7 @@ const DuplicateModal = ({ open, data, setOpen }: any) => {
             label="Quantity"
             isPending={isPending}
             defaultValue={quantity}
+            required={true}
           />
           <FormFieldFormUpdate
             type="date"
@@ -116,6 +119,7 @@ const DuplicateModal = ({ open, data, setOpen }: any) => {
             label="Release Date"
             isPending={isPending}
             defaultValue={releaseDate}
+            required={true}
           />
 
           <FormFieldFormUpdate
@@ -124,6 +128,7 @@ const DuplicateModal = ({ open, data, setOpen }: any) => {
             label="Brand"
             isPending={isPending}
             defaultValue={brand}
+            required={true}
           />
           <FormFieldFormUpdate
             type="text"
@@ -131,6 +136,7 @@ const DuplicateModal = ({ open, data, setOpen }: any) => {
             label="Model Number"
             isPending={isPending}
             defaultValue={modelNumber}
+            required={true}
           />
           <FormFieldFormUpdate
             type="text"
@@ -138,6 +144,7 @@ const DuplicateModal = ({ open, data, setOpen }: any) => {
             label="Category"
             isPending={isPending}
             defaultValue={category}
+            required={true}
           />
           <FormFieldFormUpdate
             type="text"

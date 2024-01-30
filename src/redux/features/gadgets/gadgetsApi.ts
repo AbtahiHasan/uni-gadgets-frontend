@@ -1,4 +1,5 @@
-import { IQuery } from "@/interface/query.interface";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { baseApi } from "../../api/baseApi";
 
 const gadgetsApi = baseApi.injectEndpoints({
@@ -11,21 +12,25 @@ const gadgetsApi = baseApi.injectEndpoints({
       }),
     }),
     getGadgets: builder.query({
-      query: (data?: IQuery) => {
+      query: (data?: any) => {
         let searchParams = {};
-        if (data) {
+        if (Object.keys(data as object)) {
           searchParams = new URLSearchParams({
-            ...(data.minPrice && { minPrice: data.minPrice }),
-            ...(data.maxPrice && { maxPrice: data.maxPrice }),
-            ...(data.releaseDate && { releaseDate: data.releaseDate }),
-            ...(data.brand && { brand: data.brand }),
-            ...(data.modelNumber && { modelNumber: data.modelNumber }),
-            ...(data.category && { category: data.category }),
-            ...(data.operatingSystem && {
-              operatingSystem: data.operatingSystem,
+            ...(data?.minPrice && { minPrice: data.minPrice }),
+            ...(data?.maxPrice && { maxPrice: data.maxPrice }),
+            ...(data?.releaseDate && { releaseDate: data.releaseDate }),
+            ...(data?.brand && { brand: data.brand }),
+            ...(data?.modelNumber && { modelNumber: data.modelNumber }),
+            ...(data?.category && { category: data.category }),
+            ...(data?.operatingSystem && {
+              operatingSystem: data?.operatingSystem,
             }),
-            ...(data.connectivity && { connectivity: data.connectivity }),
-            ...(data.powerSource && { powerSource: data.powerSource }),
+            ...(data?.connectivity && { connectivity: data.connectivity }),
+            ...(data?.powerSource && { powerSource: data.powerSource }),
+            ...(data?.storage && { storage: data.storage }),
+            ...(data?.cameraResolution && {
+              cameraResolution: data.cameraResolution,
+            }),
           });
         }
         return {

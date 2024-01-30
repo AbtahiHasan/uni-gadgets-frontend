@@ -47,7 +47,7 @@ const UpdateGadgets = () => {
       name: form.name.value,
       price: parseFloat(form.price.value),
       quantity: parseInt(form.quantity.value),
-      releaseDate: form.releaseDate.value,
+      releaseDate: form.releaseDate?.value || releaseDate,
       brand: form.brand.value,
       modelNumber: form.modelNumber.value,
       category: form.category.value,
@@ -71,7 +71,7 @@ const UpdateGadgets = () => {
             setSuccess(data?.data?.message);
           }
         })
-        .catch((error) => {
+        .catch((error: any) => {
           console.log(error);
           setError("Something went wrong");
         });

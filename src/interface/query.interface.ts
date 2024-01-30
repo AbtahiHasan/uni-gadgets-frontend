@@ -1,6 +1,6 @@
 export interface IQuery {
-  minPrice: string;
-  maxPrice: string;
+  minPrice: number;
+  maxPrice: number;
   releaseDate: string;
   brand: string;
   modelNumber: string;
@@ -8,4 +8,6 @@ export interface IQuery {
   operatingSystem: string;
   connectivity: string;
   powerSource: string;
+  cameraResolution: number;
+  storage: number;
 }
