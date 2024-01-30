@@ -60,7 +60,7 @@ export const LoginFrom = () => {
               setUser({ user: user, token: data?.data?.data?.accessToken })
             );
             setSuccess(data?.data?.message);
-            navigate("/dashboard");
+            navigate("/");
           }
         })
         .catch((error) => {

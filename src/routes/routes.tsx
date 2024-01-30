@@ -9,11 +9,16 @@ import Gadgets from "@/pages/Gadgets";
 import SalesManagement from "@/pages/SalesManagement";
 import SalesHistory from "@/pages/SalesHistory";
 import UpdateGadgets from "@/pages/UpdateGadgets";
+import ProtectedRoute from "./ProductedRoute";
 
 const router = createBrowserRouter([
   {
-    path: "/dashboard",
-    element: <DashboardLayout />,
+    path: "/",
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: "home",

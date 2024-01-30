@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { RxDashboard } from "react-icons/rx";
 import { NavLink, Outlet } from "react-router-dom";
 import { AiOutlineFileAdd, AiOutlineControl } from "react-icons/ai";
@@ -5,6 +6,9 @@ import { FaHistory, FaListUl } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { currentUser, setUser } from "@/redux/features/auth/authSlice";
+import { IoMdLogOut } from "react-icons/io";
 interface IRoute {
   path: string;
   icon: JSX.Element;
@@ -12,20 +16,20 @@ interface IRoute {
 }
 
 const routes: IRoute[] = [
-  { path: "/dashboard/home", icon: <RxDashboard />, label: "Dashboard" },
+  { path: "/home", icon: <RxDashboard />, label: "Dashboard" },
   {
-    path: "/dashboard/add-gadgets",
+    path: "/add-gadgets",
     icon: <AiOutlineFileAdd />,
     label: "Add Gadgets",
   },
-  { path: "/dashboard/gadgets", icon: <FaListUl />, label: "Manage Gadgets" },
+  { path: "/gadgets", icon: <FaListUl />, label: "Manage Gadgets" },
   {
-    path: "/dashboard/sales-management",
+    path: "/sales-management",
     icon: <AiOutlineControl />,
     label: "Sales Management",
   },
   {
-    path: "/dashboard/sales-history",
+    path: "/sales-history",
     icon: <FaHistory />,
     label: "Sales History",
   },
@@ -33,6 +37,8 @@ const routes: IRoute[] = [
 
 const DashboardLayout = () => {
   const [open, setOpen] = useState(false);
+  const dispatch = useAppDispatch();
+  const user: any = useAppSelector(currentUser);
   return (
     <main className="w-full h-full flex ">
       <aside
@@ -60,6 +66,15 @@ const DashboardLayout = () => {
             );
           })}
         </ul>
+        <div className="fixed top-3 right-3 bg-white shadow flex items-center gap-2 text-xl p-3 rounded">
+          Hi, <span>{user?.name?.split(" ")?.[0]}</span>
+          <button
+            className="text-red-500"
+            onClick={() => dispatch(setUser({ user: null, token: null }))}
+          >
+            <IoMdLogOut />
+          </button>
+        </div>
       </aside>
       <main className="md:absolute w-full md:w-[calc(100%-200px)] md:p-5 min-h-screen bg-[#ececec] md:left-[200px]">
         <Button
