@@ -1,7 +1,6 @@
-import { routes } from "@/layouts/DashboardLayout";
 import { currentToken } from "@/redux/features/auth/authSlice";
 import { useAppSelector } from "@/redux/hooks";
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 
 import { Navigate } from "react-router-dom";
 
