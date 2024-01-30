@@ -15,7 +15,7 @@ interface IRoute {
   label: string;
 }
 
-const routes: IRoute[] = [
+export const routes: IRoute[] = [
   { path: "/home", icon: <RxDashboard />, label: "Dashboard" },
   {
     path: "/add-gadgets",

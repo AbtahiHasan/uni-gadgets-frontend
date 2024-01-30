@@ -10,6 +10,7 @@ import SalesManagement from "@/pages/SalesManagement";
 import SalesHistory from "@/pages/SalesHistory";
 import UpdateGadgets from "@/pages/UpdateGadgets";
 import ProtectedRoute from "./ProductedRoute";
+import ErrorPage from "@/pages/ErrorPage";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
         <DashboardLayout />
       </ProtectedRoute>
     ),
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "home",
