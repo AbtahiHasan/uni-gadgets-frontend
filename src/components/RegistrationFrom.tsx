@@ -56,7 +56,7 @@ export const RegistrationFrom = () => {
         const user = jwtDecode(data?.data?.data?.accessToken);
         dispatch(setUser({ user: user, token: data?.data?.data?.accessToken }));
         setSuccess(data?.data?.message);
-        navigate("/dashboard");
+        navigate("/");
       }
       if (data?.error?.data?.message) {
         setError(data?.error?.data?.message);
