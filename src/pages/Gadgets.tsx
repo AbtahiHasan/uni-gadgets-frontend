@@ -16,6 +16,8 @@ import moment from "moment";
 import toast from "react-hot-toast";
 import FilterUI from "@/components/FilterUI";
 import { IQuery } from "@/interface/query.interface";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const Gadgets = () => {
   const [query, setQuery] = useState<Partial<IQuery>>({});
@@ -44,13 +46,23 @@ const Gadgets = () => {
   return (
     <>
       <Heading title="Gadgets Management" />
-      <main className="flex gap-10 flex-col-reverse md:flex-row relative">
-        <section className="flex items-center flex-col overflow-x-auto max-w-[800px] mx-auto">
+      <main className="max-w-[1000px] w-full mx-auto">
+        <section className=" ">
           <div className="w-full flex justify-start  mt-2">
-            <Button onClick={deleteBulk}>Bulk Delete</Button>
+            <Button variant="destructive" onClick={deleteBulk}>
+              Bulk Delete
+            </Button>
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button className="ml-auto">Filter</Button>
+              </SheetTrigger>
+              <SheetContent>
+                <FilterUI setQuery={setQuery} query={query} />
+              </SheetContent>
+            </Sheet>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-[800px] mx-auto mt-5">
+          <div className=" overflow-x-auto ">
+            <table className="w-[1000px]  mx-auto mt-5">
               <thead className="bg-[#c1c1c1] ">
                 <tr>
                   <th className="py-2">Bulk</th>
@@ -123,7 +135,6 @@ const Gadgets = () => {
             </table>
           </div>
         </section>
-        <FilterUI setQuery={setQuery} query={query} />
       </main>
     </>
   );
