@@ -7,6 +7,7 @@ import { FormSuccess } from "./shared/form-success";
 import { Button } from "./ui/button";
 import FormFieldFormUpdate from "./shared/FormFieldFormUpdate";
 import { useAddGadgetMutation } from "@/redux/features/gadgets/gadgetsApi";
+import toast from "react-hot-toast";
 
 const DuplicateModal = ({ open, data, setOpen }: any) => {
   const [error, setError] = useState<string | undefined>("");
@@ -31,6 +32,7 @@ const DuplicateModal = ({ open, data, setOpen }: any) => {
   const { cameraResolution, storageCapacity } = features || {};
 
   const onSubmit = (e: any) => {
+    e.preventDefault();
     setError("");
     setSuccess("");
     const form = e.target;
@@ -60,6 +62,13 @@ const DuplicateModal = ({ open, data, setOpen }: any) => {
           }
           if (data?.data?.success) {
             setSuccess(data?.data?.message);
+            if (data?.data?.success) {
+              setSuccess(data?.data?.message);
+
+              toast.success("gadget duplicate successfully", {
+                position: "top-right",
+              });
+            }
           }
         })
         .catch((error: any) => {

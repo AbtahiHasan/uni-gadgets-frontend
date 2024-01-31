@@ -1,7 +1,11 @@
-import React from "react";
+import banner from "/banner.jpg";
 
 const DashboardHome = () => {
-  return <div>DashboardHome</div>;
+  return (
+    <main>
+      <img className="w-full object-cover" src={banner} alt="" />
+    </main>
+  );
 };
 
 export default DashboardHome;

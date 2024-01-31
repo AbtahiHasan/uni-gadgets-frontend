@@ -11,6 +11,7 @@ import {
   useUpdateGadgetMutation,
 } from "@/redux/features/gadgets/gadgetsApi";
 import { useState, useTransition } from "react";
+import toast from "react-hot-toast";
 
 import { useParams } from "react-router-dom";
 
@@ -40,6 +41,7 @@ const UpdateGadgets = () => {
   const { cameraResolution, storageCapacity } = features || {};
 
   const onSubmit = (e: any) => {
+    e.preventDefault();
     setError("");
     setSuccess("");
     const form = e.target;
@@ -69,6 +71,10 @@ const UpdateGadgets = () => {
           }
           if (data?.data?.success) {
             setSuccess(data?.data?.message);
+
+            toast.success("gadget created successfully", {
+              position: "top-right",
+            });
           }
         })
         .catch((error: any) => {

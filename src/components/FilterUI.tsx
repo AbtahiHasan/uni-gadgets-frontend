@@ -4,7 +4,10 @@ import { Input } from "./ui/input";
 
 const FilterUI = ({ setQuery, query }: any) => {
   return (
-    <aside>
+    <aside className="min-w-[250px] md:sticky top-10">
+      <hr />
+      <h2 className="my-3 text-xl font-bold">Filters Options</h2>
+      <hr />
       <p className="mt-4">Price Range:</p>
       <div className="flex gap-1 items-center">
         <Input

@@ -51,6 +51,9 @@ const SalesHistory = () => {
             </tr>
           </thead>
           <tbody>
+            {Array.isArray(data?.data) && data?.data?.length === 0 && (
+              <p className="my-2 text-center">no data found</p>
+            )}
             {Array.isArray(data?.data) &&
               data?.data?.map((sale: any, i: number) => {
                 const { _id, quantity, buyerName, buyDate } = sale;
