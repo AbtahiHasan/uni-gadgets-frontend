@@ -42,10 +42,18 @@ const gadgetsApi = baseApi.injectEndpoints({
     }),
 
     getAllGadgets: builder.query({
-      query: (searchText) => ({
-        url: `/products/get-products?searchTerms=${searchText}`,
-        method: "GET",
-      }),
+      query: (searchText) => {
+        if (searchText) {
+          searchText = `searchTerms=${searchText}`;
+        } else {
+          searchText = "";
+        }
+
+        return {
+          url: `/products/get-products?${searchText}`,
+          method: "GET",
+        };
+      },
     }),
     getSingleGadget: builder.query({
       query: (id) => ({
