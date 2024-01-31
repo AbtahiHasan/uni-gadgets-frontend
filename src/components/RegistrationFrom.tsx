@@ -2,7 +2,7 @@
 "use client";
 
 import * as z from "zod";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -30,10 +30,10 @@ import { useAppDispatch } from "@/redux/hooks";
 export const RegistrationFrom = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
-  const [isPending, startTransition] = useTransition();
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [register] = useRegisterMutation();
+  const [register, { isLoading }] = useRegisterMutation();
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
@@ -47,24 +47,20 @@ export const RegistrationFrom = () => {
   const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
     setError("");
     setSuccess("");
-    console.log(values);
-    startTransition(() => {
-      register(values).then((data: any) => {
-        console.log({ data: data?.data });
-        if (data?.data?.success) {
-          form.reset();
 
-          const user = jwtDecode(data?.data?.data?.accessToken);
-          dispatch(
-            setUser({ user: user, token: data?.data?.data?.accessToken })
-          );
-          setSuccess(data?.data?.message);
-          navigate("/dashboard");
-        }
-        if (data?.error?.data?.message) {
-          setError(data?.error?.data?.message);
-        }
-      });
+    register(values).then((data: any) => {
+      console.log({ data: data?.data });
+      if (data?.data?.success) {
+        form.reset();
+
+        const user = jwtDecode(data?.data?.data?.accessToken);
+        dispatch(setUser({ user: user, token: data?.data?.data?.accessToken }));
+        setSuccess(data?.data?.message);
+        navigate("/dashboard");
+      }
+      if (data?.error?.data?.message) {
+        setError(data?.error?.data?.message);
+      }
     });
   };
 
@@ -86,7 +82,7 @@ export const RegistrationFrom = () => {
                   <FormControl>
                     <Input
                       {...field}
-                      disabled={isPending}
+                      disabled={isLoading}
                       placeholder="John Doe"
                     />
                   </FormControl>
@@ -103,7 +99,7 @@ export const RegistrationFrom = () => {
                   <FormControl>
                     <Input
                       {...field}
-                      disabled={isPending}
+                      disabled={isLoading}
                       placeholder="john.doe@example.com"
                       type="email"
                     />
@@ -121,7 +117,7 @@ export const RegistrationFrom = () => {
                   <FormControl>
                     <Input
                       {...field}
-                      disabled={isPending}
+                      disabled={isLoading}
                       placeholder="******"
                       type="password"
                     />
@@ -133,7 +129,7 @@ export const RegistrationFrom = () => {
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button disabled={isPending} type="submit" className="w-full">
+          <Button disabled={isLoading} type="submit" className="w-full">
             Create an account
           </Button>
         </form>

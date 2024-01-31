@@ -16,7 +16,7 @@ import moment from "moment";
 import toast from "react-hot-toast";
 import FilterUI from "@/components/FilterUI";
 import { IQuery } from "@/interface/query.interface";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const Gadgets = () => {

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as z from "zod";
 import { useForm } from "react-hook-form";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -28,9 +28,9 @@ export const LoginFrom = () => {
   const [error, setError] = useState<string | undefined>("");
 
   const [success, setSuccess] = useState<string | undefined>("");
-  const [isPending, startTransition] = useTransition();
+
   const navigate = useNavigate();
-  const [login] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
   const dispatch = useAppDispatch();
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -44,30 +44,29 @@ export const LoginFrom = () => {
     setError("");
     setSuccess("");
     console.log(values);
-    startTransition(() => {
-      login(values)
-        .then((data: any) => {
-          console.log("login", data?.data?.data?.accessToken);
-          if (data?.data.error) {
-            form.reset();
-            setError(data.error);
-          }
-          if (data?.data?.success) {
-            form.reset();
 
-            const user = jwtDecode(data?.data?.data?.accessToken);
-            dispatch(
-              setUser({ user: user, token: data?.data?.data?.accessToken })
-            );
-            setSuccess(data?.data?.message);
-            navigate("/");
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          setError("Something went wrong");
-        });
-    });
+    login(values)
+      .then((data: any) => {
+        console.log("login", data?.data?.data?.accessToken);
+        if (data?.data.error) {
+          form.reset();
+          setError(data.error);
+        }
+        if (data?.data?.success) {
+          form.reset();
+
+          const user = jwtDecode(data?.data?.data?.accessToken);
+          dispatch(
+            setUser({ user: user, token: data?.data?.data?.accessToken })
+          );
+          setSuccess(data?.data?.message);
+          navigate("/");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        setError("Something went wrong");
+      });
   };
 
   return (
@@ -88,7 +87,7 @@ export const LoginFrom = () => {
                   <FormControl>
                     <Input
                       {...field}
-                      disabled={isPending}
+                      disabled={isLoading}
                       placeholder="john.doe@example.com"
                       type="email"
                     />
@@ -106,7 +105,7 @@ export const LoginFrom = () => {
                   <FormControl>
                     <Input
                       {...field}
-                      disabled={isPending}
+                      disabled={isLoading}
                       placeholder="******"
                       type="password"
                     />
@@ -119,7 +118,7 @@ export const LoginFrom = () => {
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button disabled={isPending} type="submit" className="w-full">
+          <Button disabled={isLoading} type="submit" className="w-full">
             Login
           </Button>
         </form>
