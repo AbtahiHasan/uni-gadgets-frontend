@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { currentUser, setUser } from "@/redux/features/auth/authSlice";
 import { IoMdLogOut } from "react-icons/io";
 import { MdOutlineShoppingCart } from "react-icons/md";
+import { IoSettingsOutline } from "react-icons/io5";
 interface IRoute {
   path: string;
   icon: JSX.Element;
@@ -59,6 +60,12 @@ const routes: IRoute[] = [
     path: "/sales-history",
     icon: <FaHistory />,
     label: "Sales History",
+    role: ["manager", "user"],
+  },
+  {
+    path: "/ownership",
+    icon: <IoSettingsOutline />,
+    label: "Ownership",
     role: ["manager", "user"],
   },
 ];

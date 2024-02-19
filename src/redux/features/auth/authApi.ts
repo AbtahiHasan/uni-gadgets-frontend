@@ -16,7 +16,18 @@ const authApi = baseApi.injectEndpoints({
         body: userInfo,
       }),
     }),
+    changeUserRole: builder.mutation({
+      query: (roleInfo) => ({
+        url: "/auth/change-user-role",
+        method: "PUT",
+        body: roleInfo,
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation } = authApi;
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useChangeUserRoleMutation,
+} = authApi;

@@ -13,6 +13,7 @@ import ProtectedRoute from "./ProductedRoute";
 import ErrorPage from "@/pages/ErrorPage";
 import MyGadgets from "@/pages/MyGadgets";
 import Cart from "@/pages/Cart";
+import Ownership from "@/pages/Ownership";
 
 const router = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
       {
         path: "sales-history",
         element: <SalesHistory />,
+      },
+      {
+        path: "ownership",
+        element: <Ownership />,
       },
     ],
   },
