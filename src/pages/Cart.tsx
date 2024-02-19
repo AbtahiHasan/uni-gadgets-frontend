@@ -1,11 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Heading from "@/components/shared/heading";
 import { Button } from "@/components/ui/button";
-import { useGetMyCartQuery } from "@/redux/features/cart/cartApi";
+import {
+  useGetMyCartQuery,
+  useRemoveCartProductMutation,
+} from "@/redux/features/cart/cartApi";
+import { useUpdateGadgetMutation } from "@/redux/features/gadgets/gadgetsApi";
 import { IoMdClose } from "react-icons/io";
 const Cart = () => {
   const { data } = useGetMyCartQuery(undefined);
-
+  const [updateQuantity, { isLoading }] = useUpdateGadgetMutation();
+  const [removeCartProduct, { isLoading: cartIsLoading }] =
+    useRemoveCartProductMutation();
   const totalPrice = data?.data?.reduce(
     (a: number, b: any) => a + b?.price * b?.quantity,
     0
@@ -48,17 +54,24 @@ const Cart = () => {
                     <div>
                       <div className="flex items-center gap-2">
                         <Button
-                          // onClick={() => handleQuantity(item._id, "dec")}
+                          onClick={() =>
+                            updateQuantity({ type: "dec", id: item._id })
+                          }
                           className=" hover:bg-black btn-sm text-xl bg-black text-white"
-                          disabled={item.quantity === 1}
+                          disabled={item.quantity === 1 || isLoading}
                         >
                           -
                         </Button>
                         <p>{item?.quantity}</p>
                         <Button
-                          // onClick={() => handleQuantity(item._id, "inc")}
+                          onClick={() =>
+                            updateQuantity({ type: "inc", id: item._id })
+                          }
                           className=" hover:bg-black btn-sm text-xl bg-black text-white"
-                          disabled={item?.quantity >= item?.product_quantity}
+                          disabled={
+                            item?.quantity >= item?.product_quantity ||
+                            isLoading
+                          }
                         >
                           +
                         </Button>
@@ -67,8 +80,9 @@ const Cart = () => {
                   </div>
                   <div className="absolute -top-2 -right-2">
                     <button
-                      // onClick={() => handleCartDelete(item?._id)}
+                      onClick={() => removeCartProduct(item?._id)}
                       className="p-2 bg-red-500 text-white rounded-full"
+                      disabled={cartIsLoading}
                     >
                       <IoMdClose />
                     </button>
