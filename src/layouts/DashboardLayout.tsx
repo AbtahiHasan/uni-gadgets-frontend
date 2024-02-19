@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { currentUser, setUser } from "@/redux/features/auth/authSlice";
 import { IoMdLogOut } from "react-icons/io";
+import { MdOutlineShoppingCart } from "react-icons/md";
 interface IRoute {
   path: string;
   icon: JSX.Element;
@@ -16,7 +17,7 @@ interface IRoute {
   role: ("user" | "manager")[];
 }
 
-export const routes: IRoute[] = [
+const routes: IRoute[] = [
   {
     path: "/home",
     icon: <RxDashboard />,
@@ -41,6 +42,12 @@ export const routes: IRoute[] = [
     icon: <FaListUl />,
     label: "Manage Gadgets",
     role: ["manager"],
+  },
+  {
+    path: "/cart",
+    icon: <MdOutlineShoppingCart />,
+    label: "Cart",
+    role: ["manager", "user"],
   },
   {
     path: "/sales-management",

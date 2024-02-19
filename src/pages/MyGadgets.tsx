@@ -4,7 +4,7 @@ import Heading from "@/components/shared/heading";
 import {
   useDeleteGadgetMutation,
   useDeleteMultipleMutation,
-  useGetGadgetsQuery,
+  useGetMyGadgetsQuery,
 } from "@/redux/features/gadgets/gadgetsApi";
 import { FaRegEdit } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -21,7 +21,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const MyGadgets = () => {
   const [query, setQuery] = useState<Partial<IQuery>>({});
-  const { data } = useGetGadgetsQuery(query);
+  const { data } = useGetMyGadgetsQuery(query);
   const [deleteMultiple] = useDeleteMultipleMutation();
   const [ids, setIds] = useState<string[]>([]);
   const [deleteGadget] = useDeleteGadgetMutation();
