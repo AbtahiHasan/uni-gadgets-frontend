@@ -2,7 +2,7 @@
 
 import Heading from "@/components/shared/heading";
 import { useGetAllGadgetsQuery } from "@/redux/features/gadgets/gadgetsApi";
-import { IoMdCloseCircleOutline } from "react-icons/io";
+
 import {
   Card,
   CardContent,
@@ -12,94 +12,31 @@ import {
 import moment from "moment";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import FormFieldUtils from "@/components/shared/FormFieldUtils";
-import { useForm } from "react-hook-form";
-import { useAddSaleMutation } from "@/redux/features/sales/SalesApi";
+
 import toast from "react-hot-toast";
 import { Input } from "@/components/ui/input";
 import { GoSearch } from "react-icons/go";
+import { useAddToCartMutation } from "@/redux/features/cart/cartApi";
 
 const SalesManagement = () => {
   const [searchText, setSearchText] = useState("");
   const { data, refetch } = useGetAllGadgetsQuery(searchText);
-  const [open, setOpen] = useState(false);
-  const { register, handleSubmit, reset } = useForm();
-  const [gadgetId, setGadgetId] = useState("");
-  const [limit, setLimit] = useState(0);
-  const [addSale] = useAddSaleMutation();
+
+  const [AddToCart, { isLoading }] = useAddToCartMutation();
   console.log({ data });
 
-  const sellGadget = (data: any) => {
-    addSale({
-      productId: gadgetId,
-      quantity: parseInt(data.quantity),
-      buyerName: data.buyerName,
-      buyDate: data.buyDate,
-    }).then((res: any) => {
-      if (res.data.success) {
-        reset();
+  const createCart = (data: any) => {
+    AddToCart(data).then((res: any) => {
+      if (res.data?.success) {
         refetch();
-        setOpen(false);
-
-        toast.success("Sell successfully", { position: "top-right" });
+        toast.success("add to successfully", { position: "top-right" });
       }
     });
   };
   return (
-    <main
-      className={`${
-        open
-          ? "relative before:contents-[''] before:w-full before:fixed before:h-screen before:bg-[#00000028] before:z-10 before:top-0 before:left-0"
-          : ""
-      } `}
-    >
+    <main>
       <Heading title="Sales Management" />
-      <div
-        className={`${
-          open ? "" : "hidden"
-        } p-5 rounded  z-50  border bg-white fixed md:w-[50%] w-[90%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}
-      >
-        <IoMdCloseCircleOutline
-          onClick={() => {
-            setOpen(false);
-            reset();
-          }}
-          className="text-red-500 text-3xl cursor-pointer ml-auto"
-        />
-        <form onSubmit={handleSubmit(sellGadget)}>
-          <FormFieldUtils
-            register={register}
-            label="Quantity"
-            name="quantity"
-            isPending={false}
-            required={true}
-            type="number"
-            min={0}
-            max={limit}
-            placeholder={`available quantity ${limit}`}
-          />
-          <FormFieldUtils
-            register={register}
-            label="Name"
-            name="buyerName"
-            isPending={false}
-            required={true}
-            type="text"
-            placeholder="Enter your name"
-          />
-          <FormFieldUtils
-            register={register}
-            label="Buy Date"
-            name="buyDate"
-            isPending={false}
-            required={true}
-            type="date"
-          />
-          <Button type="submit" className="mt-2 w-full">
-            Sell
-          </Button>
-        </form>
-      </div>
+
       <section>
         <form className="relative w-[80%] h-[40px] mx-auto rounded-s-full mt-6">
           <Input
@@ -119,6 +56,7 @@ const SalesManagement = () => {
               _id,
               name,
               price,
+              product_image,
               releaseDate,
               brand,
               modelNumber,
@@ -127,7 +65,9 @@ const SalesManagement = () => {
             } = gadget;
             return (
               <Card key={_id}>
-                <CardHeader />
+                <CardHeader>
+                  <img src={product_image} alt="gadget image" />
+                </CardHeader>
                 <CardContent>
                   <h2 className="text-xl my-2 font-bold">{name}</h2>
                   <hr />
@@ -160,13 +100,19 @@ const SalesManagement = () => {
                 <CardFooter>
                   <Button
                     onClick={() => {
-                      setOpen(true);
-                      setGadgetId(_id);
-                      setLimit(quantity);
+                      createCart({
+                        product_id: _id,
+                        product_name: name,
+                        product_image,
+                        price,
+                        quantity: 1,
+                        product_quantity: quantity,
+                      });
                     }}
                     className="w-full"
+                    disabled={quantity === 0 || isLoading}
                   >
-                    Sell
+                    add to cart
                   </Button>
                 </CardFooter>
               </Card>

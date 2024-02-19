@@ -9,6 +9,7 @@ import { useAddGadgetMutation } from "@/redux/features/gadgets/gadgetsApi";
 
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
+import axios from "axios";
 
 const AddGadgets = () => {
   const [error, setError] = useState<string | undefined>("");
@@ -19,44 +20,58 @@ const AddGadgets = () => {
   const { handleSubmit, register, reset } = useForm();
 
   const onSubmit = (data: any) => {
-    setError("");
-    setSuccess("");
-    console.log(data);
-    const gadget = {
-      name: data.name,
-      price: parseFloat(data.price),
-      quantity: parseInt(data.quantity),
-      releaseDate: data.releaseDate,
-      brand: data.brand,
-      modelNumber: data.modelNumber,
-      category: data.category,
-      operatingSystem: data.operatingSystem,
-      connectivity: data.connectivity,
-      powerSource: data.powerSource,
-      features: {
-        cameraResolution: parseFloat(data.cameraResolution),
-        storageCapacity: parseFloat(data.storageCapacity),
-      },
-    };
+    const imageFile = { image: data.image[0] };
+    axios
+      .post(import.meta.env.VITE_IMAGE_HOSTING_API, imageFile, {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        if (res.data?.success) {
+          // now send the menu item data to the server with the image url
 
-    startTransition(() => {
-      addGadget(gadget)
-        .then((data: any) => {
-          console.log("gadgets", data?.data?.data);
-          if (data?.data.error) {
-            reset();
-            setError(data.error);
-          }
-          if (data?.data?.success) {
-            reset();
-            setSuccess(data?.data?.message);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          setError("Something went wrong");
-        });
-    });
+          setError("");
+          setSuccess("");
+          console.log(data);
+          const gadget = {
+            name: data.name,
+            price: parseFloat(data.price),
+            product_image: res.data.data.display_url,
+            quantity: parseInt(data.quantity),
+            releaseDate: data.releaseDate,
+            brand: data.brand,
+            modelNumber: data.modelNumber,
+            category: data.category,
+            operatingSystem: data.operatingSystem,
+            connectivity: data.connectivity,
+            powerSource: data.powerSource,
+            features: {
+              cameraResolution: parseFloat(data.cameraResolution),
+              storageCapacity: parseFloat(data.storageCapacity),
+            },
+          };
+
+          startTransition(() => {
+            addGadget(gadget)
+              .then((data: any) => {
+                console.log("gadgets", data?.data?.data);
+                if (data?.data.error) {
+                  reset();
+                  setError(data.error);
+                }
+                if (data?.data?.success) {
+                  reset();
+                  setSuccess(data?.data?.message);
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+                setError("Something went wrong");
+              });
+          });
+        }
+      });
   };
 
   return (
@@ -70,6 +85,14 @@ const AddGadgets = () => {
             type="text"
             name="name"
             label="Name"
+            isPending={isPending}
+            required={true}
+          />
+          <FormFieldUtils
+            register={register}
+            type="file"
+            name="image"
+            label="Image"
             isPending={isPending}
             required={true}
           />

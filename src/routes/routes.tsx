@@ -6,7 +6,7 @@ import Registration from "../pages/Registration";
 import DashboardHome from "@/pages/DashboardHome";
 import AddGadgets from "@/pages/AddGadgets";
 import Gadgets from "@/pages/Gadgets";
-import SalesManagement from "@/pages/SalesManagement";
+import Products from "@/pages/SalesManagement";
 import SalesHistory from "@/pages/SalesHistory";
 import UpdateGadgets from "@/pages/UpdateGadgets";
 import ProtectedRoute from "./ProductedRoute";
@@ -49,8 +49,8 @@ const router = createBrowserRouter([
         element: <UpdateGadgets />,
       },
       {
-        path: "sales-management",
-        element: <SalesManagement />,
+        path: "products",
+        element: <Products />,
       },
       {
         path: "sales-history",

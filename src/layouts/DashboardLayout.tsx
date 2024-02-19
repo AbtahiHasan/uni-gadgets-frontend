@@ -50,9 +50,9 @@ const routes: IRoute[] = [
     role: ["manager", "user"],
   },
   {
-    path: "/sales-management",
+    path: "/products",
     icon: <AiOutlineControl />,
-    label: "Sales Management",
+    label: "Products",
     role: ["manager", "user"],
   },
   {
