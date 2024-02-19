@@ -11,6 +11,7 @@ import SalesHistory from "@/pages/SalesHistory";
 import UpdateGadgets from "@/pages/UpdateGadgets";
 import ProtectedRoute from "./ProductedRoute";
 import ErrorPage from "@/pages/ErrorPage";
+import MyGadgets from "@/pages/MyGadgets";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: "add-gadgets",
         element: <AddGadgets />,
+      },
+      {
+        path: "my-gadgets",
+        element: <MyGadgets />,
       },
       {
         path: "gadgets",

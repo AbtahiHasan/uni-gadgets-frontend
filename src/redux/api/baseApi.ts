@@ -11,8 +11,8 @@ import { RootState } from "../store";
 import { logout, setUser } from "../features/auth/authSlice";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://uni-gadgets.onrender.com/api/v1",
-  // baseUrl: "http://localhost:5000/api/v1",
+  // baseUrl: "https://uni-gadgets.onrender.com/api/v1",
+  baseUrl: "http://localhost:5000/api/v1",
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;

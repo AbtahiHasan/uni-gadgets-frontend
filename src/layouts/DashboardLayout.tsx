@@ -13,25 +13,46 @@ interface IRoute {
   path: string;
   icon: JSX.Element;
   label: string;
+  role: ("user" | "manager")[];
 }
 
 export const routes: IRoute[] = [
-  { path: "/home", icon: <RxDashboard />, label: "Dashboard" },
+  {
+    path: "/home",
+    icon: <RxDashboard />,
+    label: "Dashboard",
+    role: ["manager", "user"],
+  },
+
   {
     path: "/add-gadgets",
     icon: <AiOutlineFileAdd />,
     label: "Add Gadgets",
+    role: ["manager", "user"],
   },
-  { path: "/gadgets", icon: <FaListUl />, label: "Manage Gadgets" },
+  {
+    path: "/my-gadgets",
+    icon: <FaListUl />,
+    label: "My Gadgets",
+    role: ["user"],
+  },
+  {
+    path: "/gadgets",
+    icon: <FaListUl />,
+    label: "Manage Gadgets",
+    role: ["manager"],
+  },
   {
     path: "/sales-management",
     icon: <AiOutlineControl />,
     label: "Sales Management",
+    role: ["manager", "user"],
   },
   {
     path: "/sales-history",
     icon: <FaHistory />,
     label: "Sales History",
+    role: ["manager", "user"],
   },
 ];
 
@@ -39,6 +60,8 @@ const DashboardLayout = () => {
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
   const user: any = useAppSelector(currentUser);
+
+  console.log({ role: user?.role });
   return (
     <main className="w-full h-full flex ">
       <aside
@@ -49,22 +72,24 @@ const DashboardLayout = () => {
         <h2 className="text-2xl font-bold ml-4 mt-2">Uni Gadgets</h2>
 
         <ul className="mt-5 px-1">
-          {routes.map((route, i) => {
-            return (
-              <li key={i}>
-                <NavLink
-                  to={route.path}
-                  className={({ isActive }) =>
-                    isActive
-                      ? "bg-primary px-4 py-2 rounded flex items-center gap-2 text-white"
-                      : "px-4 py-2 rounded flex items-center gap-2"
-                  }
-                >
-                  {route.icon} <span>{route.label}</span>
-                </NavLink>
-              </li>
-            );
-          })}
+          {routes
+            .filter((route) => route.role.includes(user?.role))
+            .map((route, i) => {
+              return (
+                <li key={i}>
+                  <NavLink
+                    to={route.path}
+                    className={({ isActive }) =>
+                      isActive
+                        ? "bg-primary px-4 py-2 rounded flex items-center gap-2 text-white"
+                        : "px-4 py-2 rounded flex items-center gap-2"
+                    }
+                  >
+                    {route.icon} <span>{route.label}</span>
+                  </NavLink>
+                </li>
+              );
+            })}
         </ul>
         <div className="fixed top-3 right-3 bg-white shadow flex items-center gap-2 text-xl p-3 rounded">
           Hi, <span>{user?.name?.split(" ")?.[0]}</span>
