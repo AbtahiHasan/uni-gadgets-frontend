@@ -79,10 +79,11 @@ const gadgetsApi = baseApi.injectEndpoints({
         }
 
         return {
-          url: `/products/get-products?${searchText}`,
+          url: `/products/get-products?${searchText}?limit=1000`,
           method: "GET",
         };
       },
+      providesTags: ["gadgets"],
     }),
     getSingleGadget: builder.query({
       query: (id) => ({

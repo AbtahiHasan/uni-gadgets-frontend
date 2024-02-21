@@ -16,10 +16,14 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { Input } from "@/components/ui/input";
 import { GoSearch } from "react-icons/go";
-import { useAddToCartMutation } from "@/redux/features/cart/cartApi";
+import {
+  useAddToCartMutation,
+  useGetMyCartQuery,
+} from "@/redux/features/cart/cartApi";
 
 const SalesManagement = () => {
   const [searchText, setSearchText] = useState("");
+  const { data: checkoutData } = useGetMyCartQuery(undefined);
   const { data, refetch } = useGetAllGadgetsQuery(searchText);
 
   const [AddToCart, { isLoading }] = useAddToCartMutation();
@@ -63,6 +67,10 @@ const SalesManagement = () => {
               category,
               quantity,
             } = gadget;
+
+            const isAdded = checkoutData?.data?.find(
+              (item: any) => item?.product_id === _id
+            );
             return (
               <Card key={_id}>
                 <CardHeader>
@@ -100,19 +108,25 @@ const SalesManagement = () => {
                 <CardFooter>
                   <Button
                     onClick={() => {
-                      createCart({
-                        product_id: _id,
-                        product_name: name,
-                        product_image,
-                        price,
-                        quantity: 1,
-                        product_quantity: quantity,
-                      });
+                      if (isAdded) {
+                        return toast.error("already added", {
+                          position: "top-right",
+                        });
+                      } else {
+                        createCart({
+                          product_id: _id,
+                          product_name: name,
+                          product_image,
+                          price,
+                          quantity: 1,
+                          product_quantity: quantity,
+                        });
+                      }
                     }}
                     className="w-full"
-                    disabled={quantity === 0 || isLoading}
+                    disabled={quantity === 0 || isLoading || isAdded}
                   >
-                    add to cart
+                    {isAdded ? "already added" : "add to cart"}
                   </Button>
                 </CardFooter>
               </Card>

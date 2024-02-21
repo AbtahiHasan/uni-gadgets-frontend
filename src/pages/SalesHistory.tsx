@@ -47,7 +47,6 @@ const SalesHistory = () => {
               <th className="py-2">Index</th>
               <th className="py-2">Buyer Name</th>
               <th className="py-2">Buy Date</th>
-              <th className="py-2">Quantity</th>
             </tr>
           </thead>
           <tbody>
@@ -56,7 +55,7 @@ const SalesHistory = () => {
             )}
             {Array.isArray(data?.data) &&
               data?.data?.map((sale: any, i: number) => {
-                const { _id, quantity, buyerName, buyDate } = sale;
+                const { _id, buyerName, buyDate } = sale;
 
                 return (
                   <tr key={_id} className="border-b ">
@@ -65,7 +64,6 @@ const SalesHistory = () => {
                     <td className="py-1 text-center">
                       {moment(buyDate).format("DD/MM/YYYY")}
                     </td>
-                    <td className="py-1 text-center">{quantity}</td>
                   </tr>
                 );
               })}

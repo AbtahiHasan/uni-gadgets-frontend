@@ -45,9 +45,9 @@ const routes: IRoute[] = [
     role: ["manager"],
   },
   {
-    path: "/cart",
+    path: "/checkout",
     icon: <MdOutlineShoppingCart />,
-    label: "Cart",
+    label: "Checkout",
     role: ["manager", "user"],
   },
   {
@@ -72,7 +72,7 @@ const routes: IRoute[] = [
 
 const DashboardLayout = () => {
   const [open, setOpen] = useState(false);
-  const dispatch = useAppDispatch();
+  const dispatch: any = useAppDispatch();
   const user: any = useAppSelector(currentUser);
 
   console.log({ role: user?.role });

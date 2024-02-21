@@ -7,15 +7,14 @@ import { Button } from "@/components/ui/button";
 
 import { useAddGadgetMutation } from "@/redux/features/gadgets/gadgetsApi";
 
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 
 const AddGadgets = () => {
   const [error, setError] = useState<string | undefined>("");
-  const [addGadget] = useAddGadgetMutation();
+  const [addGadget, { isLoading: isPending }] = useAddGadgetMutation();
   const [success, setSuccess] = useState<string | undefined>("");
-  const [isPending, startTransition] = useTransition();
 
   const { handleSubmit, register, reset } = useForm();
 
@@ -52,24 +51,22 @@ const AddGadgets = () => {
             },
           };
 
-          startTransition(() => {
-            addGadget(gadget)
-              .then((data: any) => {
-                console.log("gadgets", data?.data?.data);
-                if (data?.data.error) {
-                  reset();
-                  setError(data.error);
-                }
-                if (data?.data?.success) {
-                  reset();
-                  setSuccess(data?.data?.message);
-                }
-              })
-              .catch((error) => {
-                console.log(error);
-                setError("Something went wrong");
-              });
-          });
+          addGadget(gadget)
+            .then((data: any) => {
+              console.log("gadgets", data?.data?.data);
+              if (data?.data.error) {
+                reset();
+                setError(data.error);
+              }
+              if (data?.data?.success) {
+                reset();
+                setSuccess(data?.data?.message);
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+              setError("Something went wrong");
+            });
         }
       });
   };

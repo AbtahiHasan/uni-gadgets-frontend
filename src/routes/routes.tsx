@@ -12,7 +12,7 @@ import UpdateGadgets from "@/pages/UpdateGadgets";
 import ProtectedRoute from "./ProductedRoute";
 import ErrorPage from "@/pages/ErrorPage";
 import MyGadgets from "@/pages/MyGadgets";
-import Cart from "@/pages/Cart";
+import Checkout from "@/pages/Checkout";
 import Ownership from "@/pages/Ownership";
 
 const router = createBrowserRouter([
@@ -38,8 +38,8 @@ const router = createBrowserRouter([
         element: <MyGadgets />,
       },
       {
-        path: "cart",
-        element: <Cart />,
+        path: "checkout",
+        element: <Checkout />,
       },
       {
         path: "gadgets",
