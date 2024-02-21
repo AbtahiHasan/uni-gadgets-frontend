@@ -9,9 +9,8 @@ import { useUpdateGadgetMutation } from "@/redux/features/gadgets/gadgetsApi";
 import { IoMdClose } from "react-icons/io";
 const Cart = () => {
   const { data } = useGetMyCartQuery(undefined);
-  const [updateQuantity, { isLoading }] = useUpdateGadgetMutation();
-  const [removeCartProduct, { isLoading: cartIsLoading }] =
-    useRemoveCartProductMutation();
+  const [updateQuantity] = useUpdateGadgetMutation();
+  const [removeCartProduct] = useRemoveCartProductMutation();
   const totalPrice = data?.data?.reduce(
     (a: number, b: any) => a + b?.price * b?.quantity,
     0
@@ -58,7 +57,7 @@ const Cart = () => {
                             updateQuantity({ type: "dec", id: item._id })
                           }
                           className=" hover:bg-black btn-sm text-xl bg-black text-white"
-                          disabled={item.quantity === 1 || isLoading}
+                          disabled={item.quantity === 1}
                         >
                           -
                         </Button>
@@ -68,10 +67,7 @@ const Cart = () => {
                             updateQuantity({ type: "inc", id: item._id })
                           }
                           className=" hover:bg-black btn-sm text-xl bg-black text-white"
-                          disabled={
-                            item?.quantity >= item?.product_quantity ||
-                            isLoading
-                          }
+                          disabled={item?.quantity >= item?.product_quantity}
                         >
                           +
                         </Button>
@@ -82,7 +78,6 @@ const Cart = () => {
                     <button
                       onClick={() => removeCartProduct(item?._id)}
                       className="p-2 bg-red-500 text-white rounded-full"
-                      disabled={cartIsLoading}
                     >
                       <IoMdClose />
                     </button>
